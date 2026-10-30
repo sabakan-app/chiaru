@@ -17,6 +17,7 @@
 <style>
 :root{--bg:#F5F1FF;--card:#fff;--ink:#2B1A66;--sub:#6E5FA8;--line:#E3DAFF;--accent:#5B2EFF;--yellow:#FFD23F;--pink:#FF6FAE}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,"Hiragino Sans",sans-serif}
 main{max-width:440px;margin:0 auto;padding:40px 20px 48px;display:grid;gap:18px}
 .logo{width:96px;height:96px;border-radius:26px;box-shadow:0 12px 28px #5B2EFF40;justify-self:center}
@@ -34,8 +35,8 @@ li::before{content:"✓";color:var(--accent);font-weight:800}
 .main{background:var(--accent);color:#fff}
 .sub{background:var(--card);color:var(--ink);border:2px solid var(--line)}
 .step{font-size:13px;color:var(--sub);text-align:center;margin:0}
-.steps{margin:0;padding-left:1.4em;font-size:14px;display:grid;gap:4px}
-.steps li{display:list-item}.steps li::before{content:none}
+.code{text-align:center}
+.big{cursor:pointer;border:0;background:none;padding:0;width:100%;font-size:30px;font-weight:800;letter-spacing:4px;margin:0;color:var(--accent);font-family:ui-monospace,Menlo,monospace}
 footer{font-size:12px;color:var(--sub);text-align:center}
 footer a{color:var(--sub)}
 </style>
@@ -61,22 +62,43 @@ footer a{color:var(--sub)}
     </ul>
   </div>
 
-  <a class="btn main" href="https://apps.apple.com/jp/app/id6828329282">App Store で入れる（無料・アプリ内課金あり）</a>
-  <ol class="steps">
-    <li>入れたら、LINE などに戻って、もう一度このリンクを開く</li>
-    <li>下の「アプリで招待を受けとる」を押す（招待してくれた友だちと、おたがいに友だちになります）</li>
-  </ol>
-  <a class="btn sub" id="open" href="chiaru://">アプリで招待を受けとる</a>
-  <p class="step">もう入れている人は、このボタンだけ押せばOK。開かないときは、メニュー（…）から Safari で開いてください。</p>
+  <div class="card code" id="codebox" hidden>
+    <h2>友だちの招待コード</h2>
+    <button type="button" class="big" id="code" aria-label="招待コードをコピー"></button>
+    <p class="step" id="copied" role="status">押すとコピーできます</p>
+    <p class="step">アプリを開いたら、右上の「スキップ」を押して、ログインの上の欄に貼ってください。<br>登録が終わると、招待してくれた友だちと、おたがいに友だちになります。</p>
+  </div>
+
+  <a class="btn main" id="store" href="https://apps.apple.com/jp/app/id6828329282">App Store で入れる（無料・アプリ内課金あり）</a>
+  <p class="step" id="storenote" hidden>押すと招待コードもコピーされます。アプリを開いたら貼るだけ</p>
+  <a class="btn sub" id="open" href="chiaru://">もう入れている人は、アプリで受けとる</a>
+  <p class="step">開かないときは、メニュー（…）から Safari で開いてください。</p>
 
   <footer>
     運営: さば缶 ・ <a href="../terms.html">利用規約</a> ・ <a href="../privacy.html">プライバシーポリシー</a>
   </footer>
 </main>
 <script>
-// 招待コードは ?c= で受けとる（英数字だけ通す）
+// 招待コードは ?c= で受けとる（英数字だけ通す）。App Store で入れるとコードがアプリに届かないので、見せてコピーしてもらう
 const code = (new URLSearchParams(location.search).get('c') || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 32);
-if (code) document.getElementById('open').href = 'chiaru://i/' + code;
+if (code) {
+  document.getElementById('open').href = 'chiaru://i/' + code;
+  document.getElementById('code').textContent = code;
+  document.getElementById('codebox').hidden = false;
+  document.getElementById('storenote').hidden = false;
+  const copied = document.getElementById('copied');
+  const copy = () => (navigator.clipboard ? navigator.clipboard.writeText(code) : Promise.reject());
+  document.getElementById('code').addEventListener('click', () => {
+    copy().then(() => { copied.textContent = 'コピーしました'; }, () => { copied.textContent = 'コピーできませんでした。長押しで選んでコピーしてね'; });
+  });
+  // 押したときにコピーしてから App Store へ（コピーできなくても、そのまま進む）
+  document.getElementById('store').addEventListener('click', (e) => {
+    const go = e.currentTarget.href;
+    e.preventDefault();
+    const done = () => { location.href = go; };
+    copy().then(done, done);
+  });
+}
 </script>
 </body>
 </html>
