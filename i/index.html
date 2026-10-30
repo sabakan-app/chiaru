@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>チアる｜友だちから招待が届きました</title>
+<!-- LINE・メッセージ・X に貼ったとき、ロゴと説明つきのカードで出す（リンクだけだと怪しく見えるため） -->
+<meta name="description" content="同じ大学の友だちについての、ほめる質問に答えるアプリ。選ばれた人には「1年の女子から、チアが届いた」と届きます。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="チアる">
+<meta property="og:title" content="友だちから、チアるの招待が届きました">
+<meta property="og:description" content="「いるだけで場が明るくなる人」に選ばれると、「1年の女子から」チアが届く。同じ大学の友だちとほめあうアプリ（18歳以上の大学生向け）">
+<meta property="og:image" content="https://sabakan-app.github.io/chiaru/logo.png">
+<meta name="twitter:card" content="summary">
+<meta name="apple-itunes-app" content="app-id=6828329282">
+<link rel="icon" href="../logo.png">
+<style>
+:root{--bg:#F5F1FF;--card:#fff;--ink:#2B1A66;--sub:#6E5FA8;--line:#E3DAFF;--accent:#5B2EFF;--yellow:#FFD23F;--pink:#FF6FAE}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,"Hiragino Sans",sans-serif}
+main{max-width:440px;margin:0 auto;padding:40px 20px 48px;display:grid;gap:18px}
+.logo{width:96px;height:96px;border-radius:26px;box-shadow:0 12px 28px #5B2EFF40;justify-self:center}
+h1{font-size:26px;line-height:1.4;margin:0;text-align:center}
+.lead{color:var(--sub);text-align:center;margin:0}
+.card{background:var(--card);border-radius:22px;padding:18px;box-shadow:0 6px 18px #2B1A6614;display:grid;gap:10px}
+.card h2{font-size:15px;margin:0}
+.sample{text-align:center;padding:6px 0}
+.sample b{display:block;color:#C2337A;font-size:13px}
+.sample span{font-size:20px;font-weight:800}
+ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:14px}
+li::before{content:"✓";color:var(--accent);font-weight:800}
+.btn{display:block;text-align:center;text-decoration:none;font-weight:800;font-size:17px;border-radius:999px;padding:16px}
+.main{background:var(--accent);color:#fff}
+.sub{background:var(--card);color:var(--ink);border:2px solid var(--line)}
+.step{font-size:13px;color:var(--sub);text-align:center;margin:0}
+.steps{margin:0;padding-left:1.4em;font-size:14px;display:grid;gap:4px}
+.steps li{display:list-item}.steps li::before{content:none}
+footer{font-size:12px;color:var(--sub);text-align:center}
+footer a{color:var(--sub)}
+</style>
+</head>
+<body>
+<main>
+  <img class="logo" src="../logo.png" alt="チアるのアイコン">
+  <h1>友だちから、<br>チアるに招待が届きました</h1>
+  <p class="lead">同じ大学の友だちについての、ほめる質問に答えて、4人から1人を選ぶアプリです。</p>
+
+  <div class="card">
+    <h2>選ばれた人には、こう届きます</h2>
+    <div class="sample"><b>1年の女子から、チアが届いた</b><span>いるだけで<br>場が明るくなる人</span></div>
+  </div>
+
+  <div class="card">
+    <h2>安心して使えるように</h2>
+    <ul>
+      <li>質問は、ほめる・笑える内容だけ</li>
+      <li>選ばれた人に届くのは、基本は「学年と性別」だけ（会員〈有料〉には、頭文字や名前が見えることがあります）</li>
+      <li>18歳以上の大学生・大学院生だけが使えます。いまは東京の大学から順に開放中です</li>
+      <li>いやなことがあれば、ブロックと通報ができます</li>
+    </ul>
+  </div>
+
+  <a class="btn main" href="https://apps.apple.com/jp/app/id6828329282">App Store で入れる（無料・アプリ内課金あり）</a>
+  <ol class="steps">
+    <li>入れたら、LINE などに戻って、もう一度このリンクを開く</li>
+    <li>下の「アプリで招待を受けとる」を押す（招待してくれた友だちと、おたがいに友だちになります）</li>
+  </ol>
+  <a class="btn sub" id="open" href="chiaru://">アプリで招待を受けとる</a>
+  <p class="step">もう入れている人は、このボタンだけ押せばOK。開かないときは、メニュー（…）から Safari で開いてください。</p>
+
+  <footer>
+    運営: さば缶 ・ <a href="../terms.html">利用規約</a> ・ <a href="../privacy.html">プライバシーポリシー</a>
+  </footer>
+</main>
+<script>
+// 招待コードは ?c= で受けとる（英数字だけ通す）
+const code = (new URLSearchParams(location.search).get('c') || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 32);
+if (code) document.getElementById('open').href = 'chiaru://i/' + code;
+</script>
+</body>
+</html>
